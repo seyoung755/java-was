@@ -53,6 +53,14 @@ public class HttpResponse {
         return this;
     }
 
+    public HttpResponse ok(byte[] body) {
+        this.httpStatus = HttpStatus.OK;
+        this.addHeader("Content-Type", TEXT_HTML_CHARSET_UTF_8);
+        this.addBody(body);
+        log.debug("http response: {}", this);
+        return this;
+    }
+
     public HttpResponse badRequest() {
         this.httpStatus = HttpStatus.NOT_FOUND;
         this.addHeader("Content-Type", TEXT_HTML_CHARSET_UTF_8);

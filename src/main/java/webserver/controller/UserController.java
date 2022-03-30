@@ -9,6 +9,11 @@ import webserver.Request;
 import webserver.login.Cookie;
 import webserver.login.SessionDataBase;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -61,6 +66,38 @@ public class UserController {
     }
 
     public HttpResponse userList(HttpResponse httpResponse) {
-        return httpResponse.ok("/user/list.html");
+        try {
+            String s = Files.readString(new File("./webapp" + "/user/list.html").toPath());
+            List<User> userList = DataBase.findAll();
+            int startIndex = s.indexOf("<tbody>");
+            int endIndex = s.indexOf("</tbody>");
+
+            String header = s.substring(0, startIndex);
+            String footer = s.substring(endIndex);
+
+            StringBuilder sb = new StringBuilder(header);
+            sb.append("<tbody>");
+
+            for (int i = 0; i < userList.size(); i++) {
+                User user = userList.get(i);
+                sb.append("<tr><th scope=\"row\">")
+                        .append(i + 1)
+                        .append("</th> <td>")
+                        .append(user.getUserId())
+                        .append("</td> <td>")
+                        .append(user.getName())
+                        .append("</td> <td>")
+                        .append(user.getEmail())
+                        .append("</td> <td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td></tr>");
+            }
+
+            sb.append(footer);
+            log.debug("user/list.html result: {}", sb.toString());
+
+            return httpResponse.ok(sb.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return httpResponse.badRequest();
     }
 }
