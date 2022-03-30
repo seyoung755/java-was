@@ -1,5 +1,7 @@
 package webserver.login;
 
+import com.google.common.base.Strings;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,6 +13,9 @@ public class SessionDataBase {
     }
 
     public static void addCookie(Cookie cookie) {
+        if (Strings.isNullOrEmpty(cookie.getSessionId())) {
+            throw new IllegalArgumentException("invalid access to session");
+        }
         cookies.put(cookie.getSessionId(), cookie);
     }
 

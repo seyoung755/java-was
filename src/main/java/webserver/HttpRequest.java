@@ -53,7 +53,10 @@ public class HttpRequest {
     }
 
     public String cookie() {
-        String cookie = requestHeader.getCookie();
+        if (requestHeader.getCookie().isEmpty()) {
+            return "";
+        }
+        String cookie = requestHeader.getCookie().get();
         Map<String, String> cookieMap = parseCookies(cookie);
         return cookieMap.get("name");
     }

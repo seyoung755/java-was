@@ -53,6 +53,19 @@ public class HttpResponse {
         return this;
     }
 
+    public HttpResponse okWithCss(String url) {
+        this.httpStatus = HttpStatus.OK;
+        this.addHeader("Content-Type", "text/css");
+        try {
+            this.addBody(Files.readAllBytes(new File("./webapp" + url).toPath()));
+        } catch (IOException exception) {
+            log.error("error of http's response: {}", exception.getMessage());
+            return this.badRequest();
+        }
+        log.debug("http response: {}", this);
+        return this;
+    }
+
     public HttpResponse ok(byte[] body) {
         this.httpStatus = HttpStatus.OK;
         this.addHeader("Content-Type", TEXT_HTML_CHARSET_UTF_8);

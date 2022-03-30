@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class RequestHeader {
     private static final Logger log = LoggerFactory.getLogger(RequestHeader.class);
@@ -93,7 +94,7 @@ public class RequestHeader {
         return version;
     }
 
-    public String getCookie() {
-        return header.get("Cookie");
+    public Optional<String> getCookie() {
+        return Optional.ofNullable(header.get("Cookie"));
     }
 }
