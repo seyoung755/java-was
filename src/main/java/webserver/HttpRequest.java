@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static util.HttpRequestUtils.parseCookies;
 import static util.HttpRequestUtils.parseQueryString;
 
 public class HttpRequest {
@@ -52,7 +53,9 @@ public class HttpRequest {
     }
 
     public String cookie() {
-        return requestHeader.getCookie();
+        String cookie = requestHeader.getCookie();
+        Map<String, String> cookieMap = parseCookies(cookie);
+        return cookieMap.get("name");
     }
 
     public Map<String, String> getQueryString() {
@@ -66,7 +69,7 @@ public class HttpRequest {
             return parseQueryString(toDecode(body));
         } catch (IOException e) {
             log.error(e.getMessage());
-            return null;
+            return Map.of();
         }
     }
 

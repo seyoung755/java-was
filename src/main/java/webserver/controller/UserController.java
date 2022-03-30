@@ -56,4 +56,8 @@ public class UserController {
         SessionDataBase.deleteCookie(cookie);
         return httpResponse.redirect(INDEX_PAGE_URL);
     }
+
+    public HttpResponse userList(HttpResponse httpResponse) {
+        return httpResponse.ok("/user/list.html");
+    }
 }

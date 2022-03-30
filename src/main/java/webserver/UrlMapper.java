@@ -39,6 +39,8 @@ public class UrlMapper {
                     return userController.loginForm(url, httpResponse);
                 case "/user/logout":
                     return userController.logout(httpRequest.cookie(), httpResponse);
+                case "/user/list":
+                    return userController.userList(httpResponse);
             }
         } else if (httpRequest.postMapping()) {
             Map<String, String> body = httpRequest.getBody(bufferedReader);
@@ -55,13 +57,14 @@ public class UrlMapper {
     // 학습용용
     private static boolean checkLogin(String url, HttpRequest httpRequest) {
         List<String> loggedUrls = interceptorLoginUrl();
+        log.debug("checkLogin Cookie: {}", httpRequest.cookie());
         boolean isLoggedIn = SessionDataBase.isLoggedIn(httpRequest.cookie());
         return (!loggedUrls.contains(url) || isLoggedIn);
     }
 
     private static List<String> interceptorLoginUrl() {
         List<String> loggedUrls = new ArrayList<>();
-        loggedUrls.add("/user/profile");
+        loggedUrls.add("/user/list");
         return loggedUrls;
     }
 }
