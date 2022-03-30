@@ -38,6 +38,8 @@ public class UrlMapper {
                     return userController.loginForm(request, httpResponse);
                 case "/user/logout":
                     return userController.logout(request, httpResponse);
+                case "/user/list":
+                    return userController.userList(httpResponse);
             }
         } else if (request.isPostMethod()) {
             switch (url) {
@@ -58,7 +60,7 @@ public class UrlMapper {
 
     private static List<String> interceptorLoginUrl() {
         List<String> loggedUrls = new ArrayList<>();
-        loggedUrls.add("/user/profile");
+        loggedUrls.add("/user/list");
         return loggedUrls;
     }
 }
