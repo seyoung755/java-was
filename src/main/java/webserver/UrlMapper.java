@@ -28,6 +28,9 @@ public class UrlMapper {
             if (!checkLogin(url, request)) {
                 return httpResponse.redirect("/user/login.html");
             }
+            if (url.endsWith(".css")) {
+                return httpResponse.okWithCss(url);
+            }
 
             switch (url) {
                 case "/index.html":
@@ -54,9 +57,11 @@ public class UrlMapper {
 
     private static boolean checkLogin(String url, Request request) {
         List<String> loggedUrls = interceptorLoginUrl();
+        if (!loggedUrls.contains(url)) {
+            return true;
+        }
         log.debug("checkLogin Cookie: {}", httpRequest.cookie());
-        boolean isLoggedIn = SessionDataBase.isLoggedIn(httpRequest.cookie());
-        return (!loggedUrls.contains(url) || isLoggedIn);
+        return SessionDataBase.isLoggedIn(httpRequest.cookie());
     }
 
     private static List<String> interceptorLoginUrl() {

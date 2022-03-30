@@ -50,12 +50,15 @@ public class UserController {
         Map<String, String> body = request.getParams();
         String loginUserId = body.get("userId");
         String loginPassword = body.get("password");
-
         Optional<User> user = DataBase.findUserById(loginUserId);
         if (user.isPresent() && user.get().isMatchPassword(loginPassword)) {
             Cookie cookie = new Cookie(loginUserId);
-            SessionDataBase.addCookie(cookie);
-            return httpResponse.login(INDEX_PAGE_URL, cookie);
+            try {
+                SessionDataBase.addCookie(cookie);
+                return httpResponse.login(INDEX_PAGE_URL, cookie);
+            } catch (IllegalArgumentException exception) {
+                log.error(exception.getMessage());
+            }
         }
         return httpResponse.redirect(LOGIN_FAILED_URL);
     }
