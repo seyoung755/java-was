@@ -60,8 +60,8 @@ public class UrlMapper {
         if (!loggedUrls.contains(url)) {
             return true;
         }
-        log.debug("checkLogin Cookie: {}", httpRequest.cookie());
-        return SessionDataBase.isLoggedIn(httpRequest.cookie());
+        log.debug("checkLogin Cookie: {}", request.getCookie());
+        return SessionDataBase.isLoggedIn(request.getCookie());
     }
 
     private static List<String> interceptorLoginUrl() {
