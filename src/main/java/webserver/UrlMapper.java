@@ -54,8 +54,12 @@ public class UrlMapper {
 
     private static boolean checkLogin(String url, Request request) {
         List<String> loggedUrls = interceptorLoginUrl();
-        boolean isLoggedIn = SessionDataBase.isLoggedIn(request.getCookie());
-        return (!loggedUrls.contains(url) || isLoggedIn);
+        if (!loggedUrls.contains(url)) {
+            return true;
+        }
+        String cookie = request.getCookie();
+        log.debug("checkLogin Cookie: {}", cookie);
+        return SessionDataBase.isLoggedIn(cookie);
     }
 
     private static List<String> interceptorLoginUrl() {

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static util.HttpRequestUtils.parseCookies;
 import static util.HttpRequestUtils.parseQueryString;
 
 public class Request {
@@ -100,7 +101,12 @@ public class Request {
     }
 
     public String getCookie() {
-        return header.get("Cookie");
+        String cookie = header.get("Cookie");
+        if (Strings.isNullOrEmpty(cookie)) {
+            return "";
+        }
+        Map<String, String> cookieMap = parseCookies(cookie);
+        return cookieMap.get("name");
     }
 
     public Map<String, String> getParams() {
